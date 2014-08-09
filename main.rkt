@@ -9,6 +9,7 @@
           racket/runtime-path
           web-server/managers/lru
           web-server/managers/manager
+          web-server/managers/timeouts
           file/convertible
           racket/gui/base ; ensures that `make-ev` does not try to instantiate it multiple times
           "autocomplete.rkt"
@@ -230,6 +231,9 @@
 ;   #:initial-count 15
 ;   #:inform-p (lambda args (void))))
 
+(define mgr1 
+  (create-timeout-manager expiration-handler (* 1000 60 30) (* 1000 60 30)))
+
 (serve/servlet
  dispatch
  #:stateless? #f       
@@ -241,7 +245,7 @@
  #:servlet-regexp #rx""
  #:extra-files-paths (list static)
  #:servlet-path "/"
- #:manager mgr)
+ #:manager mgr1)
 
 
 
